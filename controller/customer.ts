@@ -9,14 +9,14 @@ export class CustomerController{
         this.customer = customer
 
     }
-    async addNewCustomer (req: Request, res: Response) {                
+    addNewCustomer = async  (req: Request, res: Response) =>{                
 
         const resuilt  =  await this.customer.addNewCustomer(req.body)
         res.json(resuilt);
 
     }
 
-    async  getVouchersForCustomer (req: Request, res: Response) {           
+    getVouchersForCustomer = async (req: Request, res: Response)=> {           
         let result = await this.customer.getVouchersForCustomer(req.params.email)
         res.send(result)
     }

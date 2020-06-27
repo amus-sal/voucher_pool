@@ -11,7 +11,7 @@ export class OfferController{
         this.offer = offer
 
     }
-    async addNewOffer (req: Request, res: Response) {                
+    addNewOffer = async  (req: Request, res: Response)=> {                
 
         const resuilt  =  await this.offer.addOffer(req.body)
         res.json(resuilt);
