@@ -1,0 +1,264 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "Voucher Pool",
+        "description": "Microservice to Create voucher pool and assign them to each customer if exist with special offer"
+
+    },
+    "servers": [
+        {
+            "url": "/",
+            "description": "Local Dev, or from Docker"
+        }
+    ],
+    "tags": [
+        {
+            "name": "Voucher",
+            "description": "API for Vouchers in the system"
+        },
+        {
+            "name": "Customer",
+            "description": "API for Customers in the system"
+        },
+        {
+            "name": "Offer",
+            "description": "API for Offers in the system"
+        }
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "paths": {
+        "/customer": {
+            "post": {
+                "tags": [
+                    "Customer"
+                ],
+                "summary": "Create a new customer in system",
+                "requestBody": {
+                    "description": "customer Object",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/definitions/Customer"
+                            }
+                        }
+                    }
+                },
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Customer"
+                        }
+                    },
+                    "400": {
+                        "description": "Failed. Bad post data."
+                    }
+                }
+            }
+        },
+        "/customer/list/vouchers/{email}": {
+            "parameters": [
+                {
+                    "name": "email",
+                    "in": "path",
+                    "required": true,
+                    "description": "email of the customer that we want to match",
+                    "type": "string"
+                }
+            ],
+            "get": {
+                "tags": [
+                    "Customer"
+                ],
+                "summary": "Get Vouchers for specific email",
+                "parameters": [
+                    {
+                        "name": "email",
+                        "in": "path",
+                        "required": true,
+                        "description": "email of the customer that we want to match",
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Voucher"
+                        }
+                    }
+                }
+            }
+        },
+        "/offer": {
+            "post": {
+                "tags": [
+                    "Offer"
+                ],
+                "summary": "Create a new offer in system",
+                "requestBody": {
+                    "description": "offer Object",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/definitions/Offer"
+                            }
+                        }
+                    }
+                },
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Offer"
+                        }
+                    },
+                    "400": {
+                        "description": "Failed. Bad post data."
+                    }
+                }
+            }
+        },
+        "/voucher": {
+            "post": {
+                "tags": [
+                    "Voucher"
+                ],
+                "summary": "Create a new Voucher in system",
+                "requestBody": {
+                    "description": "Voucher Object",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/definitions/Voucher"
+                            }
+                        }
+                    }
+                },
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "201": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Vooucher"
+                        }
+                    },
+                    "406": {
+                        "description": "Failed. Bad post data."
+                    }
+                }
+            }
+        },
+        "/voucher/use": {
+            "put": {
+                "tags": [
+                    "Voucher"
+                ],
+                "summary": "user an existing Voucher in system",
+                "requestBody": {
+                    "description": "Voucher Object",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/definitions/VooucherUseReq"
+                            }
+                        }
+                    }
+                },
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/VooucherUseResp"
+                        }
+                    },
+                    "400": {
+                        "description": "Failed. Bad post data."
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "Customer": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                }
+            }
+        },
+        "Offer": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "fixedDiscount": {
+                    "type": "number"
+                }
+            }
+        },
+        "Voucher": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "offer": {
+                    "type": "string"
+                },
+                "customer": {
+                    "type": "string"
+                },
+                "expirationDate":{
+                    "type": "date"
+
+                }
+            }
+        },
+        "VooucherUseResp": {
+            "type": "object",
+            "properties": {
+                "fixedDiscount": {
+                    "type": "string"
+                }
+            }
+        },
+        "VooucherUseReq": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

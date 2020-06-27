@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+
+  mongo:
+    image: mongo:latest
+    restart: always
+    container_name: mongo
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_INITDB_DATABASE: db
+    networks:
+      - db
+
+  web_app:
+    build: .
+    restart: always
+    container_name: voucher_app
+    depends_on:
+      - "mongo"
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+    networks:
+      - db
+    network_mode: host
+
+networks:
+  db: {}
