@@ -1,31 +1,20 @@
 import * as mongoose from 'mongoose';
 import  Offer from '../models/offer';
 import { Request, Response } from 'express';
+import offerInt from '../interfaces/offer';
 
 
 
 export class OfferController{
+    offer: offerInt
+    constructor( offer: offerInt ){
+        this.offer = offer
 
-    public addNewOffer (req: Request, res: Response) {                
-        let newOffer = new Offer(req.body);
-
-        newOffer.save((err, Offer) => {
-            if(err){
-                res.send(err);
-            }    
-            res.json(Offer);
-        });
     }
+    async addNewOffer (req: Request, res: Response) {                
 
-    public getOffers (req: Request, res: Response) {           
-        let params = req.params
-
-        Offer.find({}).populate('Offer').exec((err, Offer)=>{
-            if(err){
-                res.send(err);
-            }    
-            res.json(Offer);
-        });
+        const resuilt  =  await this.offer.addOffer(req.body)
+        res.json(resuilt);
     }
     
 }

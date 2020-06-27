@@ -1,36 +1,23 @@
-import * as mongoose from 'mongoose';
-import  Customer from '../models/customer';
 import { Request, Response } from 'express';
+import customerInt from '../interfaces/customer';
 
 
 
 export class CustomerController{
+    customer: customerInt
+    constructor( customer: customerInt ){
+        this.customer = customer
 
-    public addNewCustomer (req: Request, res: Response) {                
-        let newCustomer = new Customer(req.body);
+    }
+    async addNewCustomer (req: Request, res: Response) {                
 
-        newCustomer.save((err, Customer) => {
-            if(err){
-                res.send(err);
-            }    
-            res.json(Customer);
-        });
+        const resuilt  =  await this.customer.addNewCustomer(req.body)
+        res.json(resuilt);
+
     }
 
     async  getVouchersForCustomer (req: Request, res: Response) {           
-        let params = req.params
-        console.log( req.params.email)
-        let result = await Customer.aggregate([
-
-            {
-                "$lookup":{
-                    "from": "Voucher",
-                    "localField": "vouchers",
-                    "foreignField": "_id",
-                    "as": "vouchers"
-                }
-            }
-        ]).exec();
+        let result = await this.customer.getVouchersForCustomer(req.params.email)
         res.send(result)
     }
     
